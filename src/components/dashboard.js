@@ -1,66 +1,68 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core';
-import TextField from '@material-ui/core/TextField';
+import Container from '@material-ui/core/Container';
+
+import Grid from '@material-ui/core/Grid';
 
 import 'date-fns';
-import DateFnsUtils from '@date-io/date-fns';
-import {
-  MuiPickersUtilsProvider,
-  KeyboardDatePicker,
-} from '@material-ui/pickers';
+import CreateHit from './createHit';
+import HitList from './hitList'
+
+import { apiGetHits } from './../lib/apiClient';
+import { loadHitsToStore } from './../actions/siteActions';
 
 const styles = theme => ({
-  root: {
-    '& > *': {
-      margin: theme.spacing(1),
-      width: 200,
-    },
+  gridRoot: {
+    flexGrow: 1,
   },
+  listRoot: {
+
+  }
 });
 
 class Dashboard extends Component {
-  state = {
-    newHitSelectedDate: new Date('2014-08-18T21:11:54'),
-  }
 
-  handleDateChange = date => {
-    this.state.newHitSelectedDate = date
-  };
-
-  componentWillMount() {
-
+  UNSAFE_componentWillMount() {
+    apiGetHits()
+    .then(getHitsResponse => {
+      if (!getHitsResponse.error) {
+        this.props.loadHitsToStore(getHitsResponse.result);
+      } else {
+        console.log('api error');
+      }
+    });
   }
   
   render() {
     return(
       <div className="grey-background">
+        <Container>
+          <Grid container className={this.props.classes.gridRoot} spacing={2}>
+            <Grid item xs={8}>
+              <HitList/>
+            </Grid>
+            <Grid item xs={4}>
+              <CreateHit/>
+            </Grid>
+          </Grid>
 
-        <form className={this.props.classes.root} noValidate autoComplete="off">
-          <TextField id="standard-basic" label="Titulo del hito" />
-          <TextField id="standard-basic" label="Descripción del hito" 
-            multiline={true} rows={1}rowsMax={10}/>
-          <MuiPickersUtilsProvider utils={DateFnsUtils}>
-            <KeyboardDatePicker
-              margin="normal"
-              id="date-picker-dialog"
-              label="Date picker dialog"
-              format="MM/dd/yyyy"
-              value={this.state.newHitSelectedDate}
-              onChange={this.handleDateChange}
-              KeyboardButtonProps={{
-                'aria-label': 'change date',
-              }}
-            />
-          </MuiPickersUtilsProvider>
-        </form>
+        </Container>
       </div>
     )
   }
 }
 
 const mapStateToProps = (state) => {
-
+  return {
+    placeholder: 'placeholder'
+  }
 }
 
-export default connect(mapStateToProps)(withStyles(styles)(Dashboard))
+const mapDispatchToProps = (dispatch) => {
+  return {
+    loadHitsToStore : (hits) => {dispatch(loadHitsToStore(hits))}
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(Dashboard))

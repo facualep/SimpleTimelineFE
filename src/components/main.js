@@ -8,8 +8,6 @@ import clsx from 'clsx';
 import { withStyles } from '@material-ui/core';
 
 
-const drawerWidth = 240;
-
 const styles = theme => ({
 
 });
@@ -21,7 +19,7 @@ class Main extends Component {
     open: false,
   }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
 
   }
 

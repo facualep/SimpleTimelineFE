@@ -1,6 +1,6 @@
 export const formatApiDateToFriendly = (dateAsString) => {
   const parsedDate = new Date(Date.parse(dateAsString));
-  console.log(parsedDate, parsedDate.getYear());
+  // console.log(parsedDate, parsedDate.getYear());
   return (
     parsedDate.getDate() + "-" + 
     parsedDate.getMonth() + "-" + 
