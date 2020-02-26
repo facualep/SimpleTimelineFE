@@ -152,7 +152,7 @@ class CreateHit extends Component {
                 multiline={true} rows={1}rowsMax={10} onChange={this.handleLinksChange} value={this.state.hitLinks}/>
             </CardContent>
             <CardActions>
-              <Button type="submit" style={{ flex: 1 }} size="small">Crear Hito</Button>
+              <Button type="submit" style={{ flex: 1 }} size="small" color="primary">Crear Hito</Button>
             </CardActions>
           </Card>
         </form>
